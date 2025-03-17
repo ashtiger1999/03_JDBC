@@ -87,7 +87,7 @@ public class JDBCExample2 {
 				e2.printStackTrace();
 			}
 			
-		}
+		}// ㅗㅗ
 	}
 
 }
