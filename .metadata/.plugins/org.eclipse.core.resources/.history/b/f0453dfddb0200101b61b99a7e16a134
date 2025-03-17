@@ -1,0 +1,37 @@
+package edu.kh.prc;
+
+import java.util.Scanner;
+
+public class ggd {
+	
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in); 
+		
+		System.out.print("num 1 : ");
+		int num1 = sc.nextInt(); 
+		
+		System.out.print("num 2 : ");
+		int num2 = sc.nextInt();
+		
+		for(int i=1; i<=9; i++) {
+			for(int e=1; e<=num2; e++) {
+				System.out.printf("%d X %d = %2d     ",num1,i,i*num1);
+				num1+=1;
+			}
+			System.out.println();
+			num1-=(num2);
+		}
+		
+		System.out.println();
+		
+		for(int i=num1+num2; i<=9; i++) {
+			for(int e=1; e<=num2; e++) {
+				System.out.printf("%d X %d = %2d     ",i,e,i*e);
+				num1+=1;
+			}
+			System.out.println();
+			num1-=(num2);
+		}
+	}
+}
