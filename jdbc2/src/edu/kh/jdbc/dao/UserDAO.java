@@ -79,5 +79,30 @@ public class UserDAO {
 			// Connection 객체는 생성된 Service에서 close
 		}
 		return user; // 결과 반환 (생성된 User 객체 또는 null)
+	}
+
+	public boolean insertUser(Connection conn, String userId, String userPw, String userName) {
+		
+		try {
+			
+			String sql = """
+					INSERT INTO TB_USER 
+					VALUES(SEQ_USER_NO.NEXTVAL, ?, ?, ?, DEFAULT )
+					""";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			pstmt.setString(2, userPw);
+			pstmt.setString(3, userName);
+			
+			if(pstmt.executeUpdate()>0)
+				return true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		return false;
 	}	
 }

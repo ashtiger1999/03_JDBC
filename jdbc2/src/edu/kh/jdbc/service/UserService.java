@@ -13,6 +13,8 @@ public class UserService {
 	// 필드
 	private UserDAO dao = new UserDAO();
 
+	// 메서드
+	
 	/** 전달받은 아이디와 일치하는 User 정보 반환 서비스
 	 * @param input ( View 단에서 입력된 아이디)
 	 * @return 아이디가 일치하는 회원 정보가 닮긴 User 객체,
@@ -37,7 +39,17 @@ public class UserService {
 		return user;
 	}
 
+	public boolean insertUser(String userId, String userPw, String userName) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		boolean flag = dao.insertUser(conn, userId, userPw, userName); 
+		
+		JDBCTemplate.commit(conn);
+		
+		if(flag) return true;
+		return false;
+	}
 
-	// 메서드
 
 }
