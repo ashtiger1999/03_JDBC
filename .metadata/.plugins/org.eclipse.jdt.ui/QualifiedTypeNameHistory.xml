@@ -12,4 +12,5 @@
     <fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
     <fullyQualifiedTypeName name="lombok.AllArgsConstructor"/>
     <fullyQualifiedTypeName name="lombok.Data"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.service.UserService"/>
 </qualifiedTypeNameHistroy>

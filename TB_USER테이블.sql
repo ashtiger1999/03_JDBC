@@ -25,3 +25,17 @@ VALUES(SEQ_USER_NO.NEXTVAL, 'user02', 'pass02', '유저이', DEFAULT );
 SELECT * FROM TB_USER;
 
 COMMIT;
+
+DELETE FROM tb_user WHERE user_no = 7;
+
+DROP SEQUENCE SEQ_USER_NO;
+SELECT SEQ_USER_NO.nextval FROM dual;
+
+SELECT user_no, user_id, user_pw, user_name, to_char(enroll_date,'YYYY"년" MM"월" DD"일"') enroll_date
+FROM tb_user
+ORDER BY user_no asc;
+
+SELECT user_no, user_id, user_pw, user_name, to_char(enroll_date,'YYYY"년" MM"월" DD"일"') enroll_date
+FROM TB_USER
+WHERE user_name LIKE '%'||?||'%'
+ORDER BY user_no asc;
