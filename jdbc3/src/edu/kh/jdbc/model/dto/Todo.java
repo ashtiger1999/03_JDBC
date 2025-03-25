@@ -9,10 +9,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Todo {
 	
-	private int memberId;
-	private String name;
-	private int age;
-	private String gender;
+	private int todoId;
+	private String title;
+	private String todoYN;
+	private String createDate;
+	private String editDate;
+	private String content;
+
 }

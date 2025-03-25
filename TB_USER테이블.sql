@@ -39,3 +39,4 @@ SELECT user_no, user_id, user_pw, user_name, to_char(enroll_date,'YYYY"ë…„" MM"ì
 FROM TB_USER
 WHERE user_name LIKE '%'||?||'%'
 ORDER BY user_no asc;
+
