@@ -11,11 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Todo {
 	
-	private int todoId;
+	private int todoNo;
 	private String title;
 	private String todoYN;
 	private String createDate;
-	private String editDate;
 	private String content;
-
+	private int memberNo;
 }
