@@ -3,12 +3,14 @@ package edu.kh.jdbc.view;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import edu.kh.jdbc.model.dto.User;
 import edu.kh.jdbc.model.service.TodoService;
 
 public class TodoView {
 
 	private TodoService service = new TodoService();
 	private Scanner sc = new Scanner(System.in);
+	private User loginUser = null;
 
 	public void mainMenu() {
 
@@ -33,10 +35,10 @@ public class TodoView {
 
 				switch (input) {
 
-				/*
 				case 1:
 					signUp();
 					break;
+					/*
 				case 2:
 					logIn();
 					break;
@@ -75,4 +77,15 @@ public class TodoView {
 		} while (input != 0);
 	} // mainMenu() 종료
 
+	public void signUp() throws Exception {
+		System.out.println("\n=====회원가입=====\n");
+		if(loginUser!=null) {
+			System.out.println("로그아웃 후 이용해주세요.");
+			return;
+		}
+		System.out.print("아이디 입력 : ");
+		String id = sc.next();
+		System.out.print("패스워드 입력 : ");
+		String pw = sc.next();		
+	}
 }
