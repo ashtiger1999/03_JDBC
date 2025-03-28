@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
 
@@ -33,19 +34,24 @@ public class JDBCTemplate {
 			if(conn!=null&&!conn.isClosed()) conn.rollback();			
 		} catch (Exception e) {e.printStackTrace();}		
 	}
-	public void close(Connection conn) {
+	public static void close(Connection conn) {
 		try {
 			if(conn!=null&&!conn.isClosed()) conn.close();
 		} catch (Exception e) {e.printStackTrace();}
 	}
-	public void close(Statement stmt) {
+	public static void close(Statement stmt) {
 		try {
 			if(stmt!=null&&!stmt.isClosed()) stmt.close();
 		} catch (Exception e) {e.printStackTrace();}
 	}
-	public void close(PreparedStatement pstmt) {
+	public static void close(PreparedStatement pstmt) {
 		try {
 			if(pstmt!=null&&!pstmt.isClosed()) pstmt.close();
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	public static void close(ResultSet rs) {
+		try {
+			if(rs!=null&&!rs.isClosed()) rs.close();
 		} catch (Exception e) {e.printStackTrace();}
 	}
 }

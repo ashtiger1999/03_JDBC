@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class User {
 	
-	private int memberNo;
 	private String id;
+	private String pw;
 	private String name;
 	private String ssn;
 }
