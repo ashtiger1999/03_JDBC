@@ -200,8 +200,30 @@ public class TodoView {
 		else System.out.println("할 일 추가에 실패하였습니다.");
 	}
 	
-	public void updateTodo() {
+	public void updateTodo() throws Exception {
 		System.out.println("\n=====TODO 수정=====\n");
+		
+		if(loginUser==null) {
+			System.out.println("로그인 후 이용 가능합니다.");
+			return;
+		}
+		
+		List<Todo> todoList = service.selectTodo(loginUser.getId());
+		
+		if(todoList.isEmpty()) {
+			System.out.println("해야할 일이 없습니다.");
+			return;
+		}
+		
+		int count=1;
+		
+		for(Todo item : todoList) {
+			String str = String.format("%d번째 할 일 /  %s / 완료 여부 : %s / %s",count, item.getTitle(),item.getTodoYN(), item.getCreateDate());
+			System.out.println(str);
+			count++;
+		}
+		
+		
 		
 	}
 }
