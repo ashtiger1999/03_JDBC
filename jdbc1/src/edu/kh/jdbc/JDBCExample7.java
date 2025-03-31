@@ -108,16 +108,15 @@ public class JDBCExample7 {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
+		} 
+		finally {
 			try {
 				if(rs!=null) rs.close();
 				if(pstmt!=null) pstmt.close();
 				if(conn!=null) conn.close();
 				if(sc!=null) sc.close();
 				
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
+			} catch (Exception e2) {e2.printStackTrace();}
 		}
 	}
 }

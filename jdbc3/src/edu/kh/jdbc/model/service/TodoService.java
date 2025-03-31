@@ -15,7 +15,7 @@ public class TodoService {
 	
 	private TodoDAO dao = new TodoDAO();
 
-	/** select user(id) method
+	/** 1-1. select user(id) method
 	 * @param id
 	 * @return User user
 	 * @throws Exception
@@ -30,6 +30,12 @@ public class TodoService {
 		return user;
 	}
 	
+	/** 2. select user(String id, String pw)
+	 * @param id
+	 * @param pw
+	 * @return User user
+	 * @throws Exception
+	 */
 	public User selectUser(String id, String pw) throws Exception {
 		Connection conn = getConnection();
 		
@@ -40,7 +46,7 @@ public class TodoService {
 		return user;
 	}
 
-	/** sign up(user) method
+	/** 1-2. sign up(user) method
 	 * @param user
 	 * @return int result
 	 * @throws Exception
@@ -64,7 +70,12 @@ public class TodoService {
 	}
 
 	
-	public List<Todo> selectTodo(String id) {
+	/** 3. select todo(String id) method
+	 * @param id
+	 * @return List todoList
+	 * @throws Exception
+	 */
+	public List<Todo> selectTodo(String id) throws Exception {
 
 		Connection conn = getConnection();
 		
@@ -73,6 +84,25 @@ public class TodoService {
 		close(conn);
 		
 		return todoList;
+	}
+
+	/** 4. create todo(String title, String content, String id)
+	 * @param title
+	 * @param content
+	 * @param id
+	 * @return int result
+	 * @throws Exception
+	 */
+	public int createTodo(String title, String content, String id) throws Exception {
+		
+		Connection conn = getConnection();
+		
+		int result = dao.createTodo(conn, title, content, id);
+		
+		if(result>0) commit(conn);
+		else rollback(conn);
+				
+		return result;
 	}
 
 }

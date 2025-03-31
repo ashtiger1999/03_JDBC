@@ -46,13 +46,13 @@ public class TodoView {
 				case 3:
 					selectTodo();
 					break;
-					/*
 				case 4:
 					createTodo();
 					break;
 				case 5:
 					updateTodo();
 					break;
+					/*
 				case 6:
 					updateYN();
 					break;
@@ -79,7 +79,7 @@ public class TodoView {
 		} while (input != 0);
 	} // mainMenu() 종료
 
-	/** sign up method
+	/** 1. sign up method
 	 * @throws Exception
 	 */
 	public void signUp() throws Exception {
@@ -126,7 +126,7 @@ public class TodoView {
 		System.out.println("회원가입에 실패하였습니다.\n");
 	}
 	
-	/** log in method
+	/** 2. log in method
 	 * @throws Exception
 	 */
 	public void logIn() throws Exception {
@@ -151,6 +151,9 @@ public class TodoView {
 		System.out.printf("%s님 환영합니다.",loginUser.getName());
 	}
 
+	/** 3. select todo method
+	 * @throws Exception
+	 */
 	public void selectTodo() throws Exception {
 		System.out.println("\n=====내 TODO LIST 전체 조회=====\n");
 		
@@ -161,6 +164,11 @@ public class TodoView {
 		
 		List<Todo> todoList = service.selectTodo(loginUser.getId());
 		
+		if(todoList.isEmpty()) {
+			System.out.println("해야할 일이 없습니다.");
+			return;
+		}
+		
 		int count=1;
 		
 		for(Todo item : todoList) {
@@ -168,5 +176,32 @@ public class TodoView {
 			System.out.println(str);
 			count++;
 		}
+	}
+	
+	/** 4. create todo
+	 * @throws Exception
+	 */
+	public void createTodo() throws Exception {
+		System.out.println("\n=====새로운 TODO 작성=====\n");
+		
+		if(loginUser==null) {
+			System.out.println("로그인 후 이용 가능합니다.");
+			return;
+		}
+		
+		System.out.print("TODO 제목 : ");
+		String title = sc.nextLine();
+		System.out.print("TODO 내용 : ");
+		String content = sc.nextLine();
+		
+		int result = service.createTodo(title, content, loginUser.getId());
+		
+		if(result>0) System.out.println("할 일이 추가 되었습니다.");
+		else System.out.println("할 일 추가에 실패하였습니다.");
+	}
+	
+	public void updateTodo() {
+		System.out.println("\n=====TODO 수정=====\n");
+		
 	}
 }

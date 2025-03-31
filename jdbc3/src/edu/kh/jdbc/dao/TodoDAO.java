@@ -5,6 +5,7 @@ import static edu.kh.jdbc.common.JDBCTemplate.close;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.kh.jdbc.model.dto.Todo;
@@ -15,7 +16,7 @@ public class TodoDAO {
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
 
-	/** select user(conn, id) method
+	/** 1-1. select user(conn, id) method
 	 * @param conn
 	 * @param id
 	 * @return User user
@@ -52,6 +53,13 @@ public class TodoDAO {
 		return user;
 	}
 	
+	/** 2. select user(Connection conn, String id, String pw)
+	 * @param conn
+	 * @param id
+	 * @param pw
+	 * @return User user
+	 * @throws Exception
+	 */
 	public User selectUser(Connection conn, String id, String pw) throws Exception {
 		
 		String sql = """
@@ -82,7 +90,7 @@ public class TodoDAO {
 		return user;
 	}
 
-	/** sign up(conn, user) method
+	/** 1-2. sign up(conn, user) method
 	 * @param conn
 	 * @param user
 	 * @return int result
@@ -107,13 +115,66 @@ public class TodoDAO {
 		return result;
 	}
 
-	public List<Todo> selectTodo(Connection conn, String id) {
+	/** 3. select todo(Connection conn, String id)
+	 * @param conn
+	 * @param id
+	 * @return List todoList
+	 * @throws Exception
+	 */
+	public List<Todo> selectTodo(Connection conn, String id) throws Exception {
+		
+		List<Todo> todoList = new ArrayList<>();
 
 		String sql = """
-				select * from tb_todo
-				where member_no = ?
-				"""'
-		return null;
+				select title, todo_yn , to_char(create_date,'YYYY"년" MM"월" DD"일"') as create_date
+				from tb_todo
+				join tb_member using(member_no)
+				where id = ?
+				""";
+		
+		pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1, id);
+		
+		rs = pstmt.executeQuery();
+		
+		while(rs.next()) {
+			Todo todo = new Todo(rs.getString("title"),rs.getString("todo_yn"),rs.getString("create_date"));
+			todoList.add(todo);
+		}
+		
+		close(rs);
+		close(pstmt);
+		
+		return todoList;
+	}
+
+	/** 4. create todo(Connection conn, String title, String content, String id)
+	 * @param conn
+	 * @param title
+	 * @param content
+	 * @param id
+	 * @return int result
+	 * @throws Exception
+	 */
+	public int createTodo(Connection conn, String title, String content, String id) throws Exception {
+		
+		String sql = """
+				insert into tb_todo
+				VALUES(todo_seq.nextval, ?, 'N', sysdate, ?, 
+					(select member_no from tb_member where id = ?)
+				)			
+				""";
+		
+		pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1, title);
+		pstmt.setString(2, content);
+		pstmt.setString(3, id);
+		
+		int result = pstmt.executeUpdate();
+		
+		return result;
 	}
 
 }
