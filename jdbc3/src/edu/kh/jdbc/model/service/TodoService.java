@@ -86,7 +86,7 @@ public class TodoService {
 		return todoList;
 	}
 
-	/** 4. create todo(String title, String content, String id)
+	/** 4. create todo(String title, String content, String id) method
 	 * @param title
 	 * @param content
 	 * @param id
@@ -104,5 +104,28 @@ public class TodoService {
 				
 		return result;
 	}
+
+	/** 5. update todo(int todo, String content, String id) method
+	 * @param todo
+	 * @param content
+	 * @param id
+	 * @return int result
+	 * @throws Exception
+	 */
+	public int updateTodo(String todo, String title, String content, String id) throws Exception {
+		
+		Connection conn = getConnection();
+		
+		int result = dao.updateTodo(conn, todo, title, content, id);
+		
+		if(result>0) commit(conn);
+		else rollback(conn);
+		
+		close(conn);
+		
+		return result;
+	}
+
+
 
 }

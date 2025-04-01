@@ -177,4 +177,39 @@ public class TodoDAO {
 		return result;
 	}
 
+	/** 5. update todo(Connection conn, int todo, String content, String id) method
+	 * @param conn
+	 * @param todo
+	 * @param content
+	 * @param id
+	 * @return int result
+	 * @throws Exception
+	 */
+	public int updateTodo(Connection conn, String todo,  String title, String content, String id) throws Exception {
+
+		String sql = """
+				update tb_todo
+				set content = ?, title =?
+				where member_no = (
+					select member_no
+					from tb_member
+					where id = ?
+					)
+				and title = ?				
+				""";
+		
+		pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1, content);
+		pstmt.setString(2, title);
+		pstmt.setString(3, id);
+		pstmt.setString(4, todo);
+		
+		int result = pstmt.executeUpdate();
+		
+		return result;
+	}
+
+
+
 }

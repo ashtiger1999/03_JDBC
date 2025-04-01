@@ -69,7 +69,7 @@ public class TodoView {
 				default:
 					System.out.println("\n[메뉴 번호만 입력하세요]\n");
 				}
-				System.out.println("\n-------------------------------------\n");
+				System.out.println("\n-------------------------------------");
 			} catch (InputMismatchException e) {
 				System.out.println("\n***잘못 입력 하셨습니다***\n");
 
@@ -178,7 +178,7 @@ public class TodoView {
 		}
 	}
 	
-	/** 4. create todo
+	/** 4. create todo method
 	 * @throws Exception
 	 */
 	public void createTodo() throws Exception {
@@ -200,6 +200,9 @@ public class TodoView {
 		else System.out.println("할 일 추가에 실패하였습니다.");
 	}
 	
+	/** 5. update todo method
+	 * @throws Exception
+	 */
 	public void updateTodo() throws Exception {
 		System.out.println("\n=====TODO 수정=====\n");
 		
@@ -217,13 +220,26 @@ public class TodoView {
 		
 		int count=1;
 		
+		
 		for(Todo item : todoList) {
 			String str = String.format("%d번째 할 일 /  %s / 완료 여부 : %s / %s",count, item.getTitle(),item.getTodoYN(), item.getCreateDate());
 			System.out.println(str);
 			count++;
 		}
 		
+		System.out.println("\n어떤 할 일을 수정하시겠습니까?(숫자 입력) :");
+		int todo = sc.nextInt();
+		sc.nextLine();
 		
+		System.out.println("\n수정할 제목을 입력하세요. :");
+		String title = sc.nextLine();
 		
+		System.out.println("\n수정할 내용을 입력하세요. :");
+		String content = sc.nextLine();
+		
+		int result = service.updateTodo(todoList.get(todo-1).getTitle(), title, content, loginUser.getId());
+		
+		if(result>0) System.out.println("\n수정이 완료되었습니다.");
+		else System.out.println("\n수정에 실패하셨습니다.");
 	}
 }
