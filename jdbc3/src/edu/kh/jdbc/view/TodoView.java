@@ -23,7 +23,7 @@ public class TodoView {
 				System.out.println("\n===== TO DO LIST 관리 프로그램 =====\n");
 				System.out.println("1. 회원가입");
 				System.out.println("2. 로그인");
-				System.out.println("3. 내 TODO LIST 전체 조회");
+				System.out.println("3. 내 TODO LIST 조회");
 				System.out.println("4. 새로운 TODO 작성");
 				System.out.println("5. TODO 수정");
 				System.out.println("6. 완료 여부 변경");
@@ -52,7 +52,6 @@ public class TodoView {
 				case 5:
 					updateTodo();
 					break;
-					/*
 				case 6:
 					updateYN();
 					break;
@@ -60,9 +59,9 @@ public class TodoView {
 					deleteTodo();
 					break;
 				case 8:
-					logOut();
+					logout();
 					break;
-				*/
+
 				case 0:
 					System.out.println("\n[프로그램 종료]\n");
 					break;
@@ -73,173 +72,315 @@ public class TodoView {
 			} catch (InputMismatchException e) {
 				System.out.println("\n***잘못 입력 하셨습니다***\n");
 
-				input = -1; 
-				sc.nextLine(); 
-			} catch (Exception e) {e.printStackTrace();}
+				input = -1;
+				sc.nextLine();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} while (input != 0);
 	} // mainMenu() 종료
 
-	/** 1. sign up method
+	/**
+	 * 1. sign up method
+	 * 
 	 * @throws Exception
 	 */
 	public void signUp() throws Exception {
 		System.out.println("\n=====회원가입=====\n");
-		if(loginUser!=null) {
+		if (loginUser != null) {
 			System.out.println("로그아웃 후 이용해주세요.");
 			return;
 		}
 		System.out.print("아이디 입력 : ");
 		String id = sc.next();
-		
+
 		User user = service.selectUser(id);
-		
-		if(user!=null) {
+
+		if (user != null) {
 			System.out.println("중복된 아이디 입니다.");
 			return;
 		}
-		
+
 		System.out.println("\n사용 가능한 아이디\n");
-		
+
 		System.out.print("패스워드 입력 : ");
 		String pw = sc.next();
 		System.out.print("패스워드 확인 : ");
 		String pw2 = sc.next();
-		
-		if(!pw.equals(pw2)) {
+
+		if (!pw.equals(pw2)) {
 			System.out.println("비밀번호가 일치하지 않습니다.");
 			return;
 		}
-		
+
 		System.out.print("이름 : ");
 		String name = sc.next();
 		System.out.println("주민등록번호 : ");
 		String ssn = sc.next();
-		
+
 		User signUpUser = new User(id, pw, name, ssn);
-		
+
 		int result = service.signUp(signUpUser);
-		
-		if(result>0) {
+
+		if (result > 0) {
 			System.out.println("회원가입에 성공했습니다.\n");
 			return;
 		}
 		System.out.println("회원가입에 실패하였습니다.\n");
 	}
-	
-	/** 2. log in method
+
+	/**
+	 * 2. log in method
+	 * 
 	 * @throws Exception
 	 */
 	public void logIn() throws Exception {
 		System.out.println("\n=====로그인=====\n");
-		
-		if(loginUser!=null) {
+
+		if (loginUser != null) {
 			System.out.println("로그인 중인 계정이 있습니다.");
 			return;
 		}
-		
+
 		System.out.print("아이디 : ");
 		String id = sc.next();
 		System.out.print("비밀번호 : ");
 		String pw = sc.next();
-		
-		loginUser = service.selectUser(id,pw);
-		if(loginUser==null) {
+
+		loginUser = service.selectUser(id, pw);
+		if (loginUser == null) {
 			System.out.println("로그인에 실패하셨습니다.");
 			return;
 		}
-		
-		System.out.printf("%s님 환영합니다.",loginUser.getName());
+
+		System.out.printf("%s님 환영합니다.", loginUser.getName());
 	}
 
-	/** 3. select todo method
+	/**
+	 * 3. select todo method
+	 * 
 	 * @throws Exception
 	 */
 	public void selectTodo() throws Exception {
-		System.out.println("\n=====내 TODO LIST 전체 조회=====\n");
-		
-		if(loginUser==null) {
+		System.out.println("\n=====내 TODO LIST 조회=====\n");
+
+		if (loginUser == null) {
 			System.out.println("로그인 후 이용 가능합니다.");
 			return;
 		}
-		
+
 		List<Todo> todoList = service.selectTodo(loginUser.getId());
-		
-		if(todoList.isEmpty()) {
+
+		if (todoList.isEmpty()) {
 			System.out.println("해야할 일이 없습니다.");
 			return;
 		}
-		
-		int count=1;
-		
-		for(Todo item : todoList) {
-			String str = String.format("%d번째 할 일 /  %s / 완료 여부 : %s / %s",count, item.getTitle(),item.getTodoYN(), item.getCreateDate());
+
+		int count = 1;
+
+		for (Todo item : todoList) {
+			String str = String.format("%d번째 할 일 /  %s / 완료 여부 : %s / %s", count, item.getTitle(), item.getTodoYN(),
+					item.getCreateDate());
 			System.out.println(str);
 			count++;
 		}
+
+		System.out.print("\n내용을 확인하고 싶은 todo를 선택하세요 : ");
+		int num = sc.nextInt() - 1;
+
+		if (num > todoList.size() || num < 0) {
+			System.out.println("\n잘못입력하셨습니다.");
+			return;
+		}
+
+		Todo todo = todoList.get(num);
+		Todo cont = service.selectTodo(todo);
+
+		System.out.printf("\n할일 : %s / 등록 날짜 : %s / \n완료 여부 : %s / 내용 : %s\n", cont.getTitle(), cont.getCreateDate(),
+				cont.getTodoYN(), cont.getContent());
 	}
-	
-	/** 4. create todo method
+
+	/**
+	 * 4. create todo method
+	 * 
 	 * @throws Exception
 	 */
 	public void createTodo() throws Exception {
 		System.out.println("\n=====새로운 TODO 작성=====\n");
-		
-		if(loginUser==null) {
+
+		if (loginUser == null) {
 			System.out.println("로그인 후 이용 가능합니다.");
 			return;
 		}
-		
+
 		System.out.print("TODO 제목 : ");
 		String title = sc.nextLine();
 		System.out.print("TODO 내용 : ");
 		String content = sc.nextLine();
-		
+
 		int result = service.createTodo(title, content, loginUser.getId());
-		
-		if(result>0) System.out.println("할 일이 추가 되었습니다.");
-		else System.out.println("할 일 추가에 실패하였습니다.");
+
+		if (result > 0)
+			System.out.println("할 일이 추가 되었습니다.");
+		else
+			System.out.println("할 일 추가에 실패하였습니다.");
 	}
-	
-	/** 5. update todo method
+
+	/**
+	 * 5. update todo method
+	 * 
 	 * @throws Exception
 	 */
 	public void updateTodo() throws Exception {
 		System.out.println("\n=====TODO 수정=====\n");
-		
-		if(loginUser==null) {
+
+		if (loginUser == null) {
 			System.out.println("로그인 후 이용 가능합니다.");
 			return;
 		}
-		
+
 		List<Todo> todoList = service.selectTodo(loginUser.getId());
-		
-		if(todoList.isEmpty()) {
+
+		if (todoList.isEmpty()) {
 			System.out.println("해야할 일이 없습니다.");
 			return;
 		}
-		
-		int count=1;
-		
-		
-		for(Todo item : todoList) {
-			String str = String.format("%d번째 할 일 /  %s / 완료 여부 : %s / %s",count, item.getTitle(),item.getTodoYN(), item.getCreateDate());
+
+		int count = 1;
+
+		for (Todo item : todoList) {
+			String str = String.format("%d번째 할 일 /  %s / 완료 여부 : %s / %s", count, item.getTitle(), item.getTodoYN(),
+					item.getCreateDate());
 			System.out.println(str);
 			count++;
 		}
-		
-		System.out.println("\n어떤 할 일을 수정하시겠습니까?(숫자 입력) :");
+
+		System.out.print("\n어떤 할 일을 수정하시겠습니까?(숫자 입력) :");
 		int todo = sc.nextInt();
 		sc.nextLine();
-		
+
 		System.out.println("\n수정할 제목을 입력하세요. :");
 		String title = sc.nextLine();
-		
+
 		System.out.println("\n수정할 내용을 입력하세요. :");
 		String content = sc.nextLine();
+
+		int result = service.updateTodo(todoList.get(todo - 1).getTitle(), title, content, loginUser.getId());
+
+		if (result > 0)
+			System.out.println("\n수정이 완료되었습니다.");
+		else
+			System.out.println("\n수정에 실패하셨습니다.");
+	}
+
+	/**
+	 * 6.
+	 * 
+	 * @throws Exception
+	 */
+	public void updateYN() throws Exception {
+		System.out.println("\n=====완료 여부 수정하기=====\n");
+
+		if (loginUser == null) {
+			System.out.println("로그인 후 이용 가능합니다.");
+			return;
+		}
+
+		List<Todo> todoList = service.selectTodo(loginUser.getId());
+
+		if (todoList.isEmpty()) {
+			System.out.println("해야할 일이 없습니다.");
+			return;
+		}
+
+		int count = 1;
+
+		for (Todo item : todoList) {
+			String str = String.format("%d번째 할 일 /  %s / 완료 여부 : %s / %s", count, item.getTitle(), item.getTodoYN(),
+					item.getCreateDate());
+			System.out.println(str);
+			count++;
+		}
+
+		System.out.print("\n어떤 할 일을 수정하시겠습니까?(숫자 입력) :");
+		int todo = sc.nextInt();
+		sc.nextLine();
+
+		String yn = "";
+		if (todoList.get(todo - 1).getTodoYN().equals("N")) {
+			System.out.print("\n할일을 완료하시겠습니까?(Y/N) : ");
+			yn = sc.nextLine().toUpperCase();
+			if (yn.equals("Y"))
+				yn = "Y";
+			else {
+				System.out.println("변경이 취소되었습니다.");
+				return;
+			}
+		} else {
+			System.out.print("\n할일을 미완료하시겠습니까?(Y/N) : ");
+			yn = sc.nextLine().toUpperCase();
+			if (yn.equals("Y"))
+				yn = "N";
+			else {
+				System.out.println("변경이 취소되었습니다.");
+				return;
+			}
+		}
+
+		int result = service.updateTodo(todoList.get(todo - 1).getTitle(), yn, loginUser.getId());
 		
-		int result = service.updateTodo(todoList.get(todo-1).getTitle(), title, content, loginUser.getId());
-		
-		if(result>0) System.out.println("\n수정이 완료되었습니다.");
-		else System.out.println("\n수정에 실패하셨습니다.");
+		todoList  = service.selectTodo(loginUser.getId());
+
+		if (result > 0) {
+			System.out.println("\n수정이 완료되었습니다.");
+			System.out.printf("%s / 완료 여부 : %s / %s", todoList.get(todo - 1).getTitle(),
+					todoList.get(todo - 1).getTodoYN(), todoList.get(todo - 1).getCreateDate());
+		} else
+			System.out.println("\n수정에 실패하셨습니다.");
+	}
+
+	/**
+	 * 7.
+	 * 
+	 */
+	public void deleteTodo() throws Exception {
+		System.out.println("\n=====할일 삭제하기=====\n");
+
+		if (loginUser == null) {
+			System.out.println("로그인 후 이용 가능합니다.");
+			return;
+		}
+
+		List<Todo> todoList = service.selectTodo(loginUser.getId());
+
+		if (todoList.isEmpty()) {
+			System.out.println("해야할 일이 없습니다.");
+			return;
+		}
+
+		int count = 1;
+
+		for (Todo item : todoList) {
+			String str = String.format("%d번째 할 일 /  %s / 완료 여부 : %s / %s", count, item.getTitle(), item.getTodoYN(),
+					item.getCreateDate());
+			System.out.println(str);
+			count++;
+		}
+
+		System.out.print("\n어떤 할 일을 삭제하시겠습니까?(숫자 입력) :");
+		int todo = sc.nextInt();
+		sc.nextLine();
+
+		int result = service.deleteTodo(todoList.get(todo - 1).getTitle(), loginUser.getId());
+
+		if (result > 0)
+			System.out.println("삭제가 완료되었습니다.");
+		else
+			System.out.println("삭제에 실패하였습니다.");
+	}
+
+	public void logout() {
+		loginUser = null;
+		System.out.println("로그아웃 되었습니다.");
 	}
 }

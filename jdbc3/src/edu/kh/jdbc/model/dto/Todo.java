@@ -25,4 +25,12 @@ public class Todo {
 		this.todoYN = todoYN;
 		this.createDate = createDate;
 	}
+
+	public Todo(String title, String todoYN, String createDate, String content) {
+		super();
+		this.title = title;
+		this.todoYN = todoYN;
+		this.createDate = createDate;
+		this.content = content;
+	}
 }

@@ -126,6 +126,50 @@ public class TodoService {
 		return result;
 	}
 
+	public Todo selectTodo(Todo todo) throws Exception {
+		
+		Connection conn = getConnection();
+		
+		Todo cont = dao.selectTodo(conn, todo);
+		
+		close(conn);
+		
+		return cont;
+	}
+
+	/** 6.
+	 * @param title
+	 * @param yn
+	 * @param id
+	 * @return
+	 */
+	public int updateTodo(String title, String yn, String id) throws Exception {
+		
+		Connection conn = getConnection();
+		
+		int result = dao.updateTodo(conn, title, yn, id);
+		
+		if(result>0) commit(conn);
+		else rollback(conn);
+		
+		close(conn);
+		
+		return result;
+	}
+
+	public int deleteTodo(String title, String id) throws Exception {
+		Connection conn = getConnection();
+		
+		int result = dao.deleteTodo(conn, title, id);
+		
+		if(result>0) commit(conn);
+		else rollback(conn);
+		
+		close(conn);
+		
+		return result;
+	}
+
 
 
 }
